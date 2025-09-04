@@ -1,0 +1,214 @@
+{
+    "timestamp": "2025-09-04 15:42:57",
+    "model_name": "RandomForest",
+    "accuracy": 0.7636621717530163,
+    "precision": 0.5391969407265774,
+    "recall": 0.7540106951871658,
+    "f1_score": 0.6287625418060201,
+    "auc_score": 0.8379549975457904,
+    "cv_scores": {
+        "mean": 0.7451623461112318,
+        "std": 0.013174879669223094,
+        "scores": [
+            0.748995983935743,
+            0.7590361445783133,
+            0.7274549098196392
+        ]
+    },
+    "best_parameters": {
+        "class_weight": "balanced",
+        "max_depth": 20,
+        "min_samples_leaf": 5,
+        "min_samples_split": 20,
+        "n_estimators": 30
+    },
+    "feature_importance": [
+        [
+            "contract_Month-to-month",
+            0.13938737437702403
+        ],
+        [
+            "tenure",
+            0.11926452950092056
+        ],
+        [
+            "total_charges",
+            0.1081367637693876
+        ],
+        [
+            "monthly_charges",
+            0.07649847331225358
+        ],
+        [
+            "online_security_No",
+            0.06874623683889863
+        ],
+        [
+            "internet_service_Fiber optic",
+            0.06353102407452448
+        ],
+        [
+            "contract_Two year",
+            0.05077657067502351
+        ],
+        [
+            "tech_support_No",
+            0.04249722882504154
+        ],
+        [
+            "payment_method_Electronic check",
+            0.039105811540899524
+        ],
+        [
+            "contract_One year",
+            0.022280810079173218
+        ],
+        [
+            "internet_service_DSL",
+            0.019247413323911926
+        ],
+        [
+            "online_backup_No",
+            0.017698240520031713
+        ],
+        [
+            "online_security_Yes",
+            0.016574330154071164
+        ],
+        [
+            "device_protection_No",
+            0.01652464536953032
+        ],
+        [
+            "paperless_billing",
+            0.015461072874895253
+        ],
+        [
+            "tech_support_Yes",
+            0.013107117209867776
+        ],
+        [
+            "online_security_No internet service",
+            0.012923323951233197
+        ],
+        [
+            "online_backup_No internet service",
+            0.011295623703138103
+        ],
+        [
+            "gender",
+            0.009804112358757562
+        ],
+        [
+            "dual_No",
+            0.008786634989314692
+        ],
+        [
+            "is_married",
+            0.008722328594427417
+        ],
+        [
+            "streaming_movies_No",
+            0.008588771833482918
+        ],
+        [
+            "dependents",
+            0.008570830093973471
+        ],
+        [
+            "online_backup_Yes",
+            0.008567435578687032
+        ],
+        [
+            "payment_method_Bank transfer (automatic)",
+            0.008496963512801698
+        ],
+        [
+            "device_protection_Yes",
+            0.007706101333952547
+        ],
+        [
+            "streaming_movies_Yes",
+            0.0076196738437723805
+        ],
+        [
+            "senior_citizen",
+            0.0074672269650717564
+        ],
+        [
+            "dual_Yes",
+            0.007125773518874146
+        ],
+        [
+            "payment_method_Mailed check",
+            0.006715148567009986
+        ],
+        [
+            "streaming_tv_No internet service",
+            0.006499326172372233
+        ],
+        [
+            "payment_method_Credit card (automatic)",
+            0.006442772190159409
+        ],
+        [
+            "streaming_tv_No",
+            0.006367868358793259
+        ],
+        [
+            "streaming_movies_No internet service",
+            0.006276225989258049
+        ],
+        [
+            "internet_service_No",
+            0.006103892428826587
+        ],
+        [
+            "streaming_tv_Yes",
+            0.005142712787818234
+        ],
+        [
+            "device_protection_No internet service",
+            0.003830275695101845
+        ],
+        [
+            "tech_support_No internet service",
+            0.003575498315266704
+        ],
+        [
+            "dual_No phone service",
+            0.0027413685055902156
+        ],
+        [
+            "phone_service",
+            0.0017924682668617067
+        ]
+    ],
+    "classification_report": {
+        "0": {
+            "precision": 0.8961625282167043,
+            "recall": 0.7671497584541063,
+            "f1-score": 0.8266527850078085,
+            "support": 1035.0
+        },
+        "1": {
+            "precision": 0.5391969407265774,
+            "recall": 0.7540106951871658,
+            "f1-score": 0.6287625418060201,
+            "support": 374.0
+        },
+        "accuracy": 0.7636621717530163,
+        "macro avg": {
+            "precision": 0.7176797344716408,
+            "recall": 0.7605802268206361,
+            "f1-score": 0.7277076634069143,
+            "support": 1409.0
+        },
+        "weighted avg": {
+            "precision": 0.801410839273264,
+            "recall": 0.7636621717530163,
+            "f1-score": 0.774125495470925,
+            "support": 1409.0
+        }
+    }
+}

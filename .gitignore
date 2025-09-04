@@ -11,3 +11,4 @@ wheels/
 datasets/
 uv.lock
 tests/
+logs/*
