@@ -5,7 +5,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.metrics import accuracy_score, classification_report, roc_auc_score
 import pickle
-import shap
 from datetime import datetime
 from src.logger_config import load_logger
 
@@ -86,18 +85,22 @@ class ChurnPredictor:
             logger.info(f"Stored numerical imputation values: {self.numerical_imputation_values}")
             logger.info(f"Stored categorical imputation values: {self.categorical_imputation_values}")
         
-        # Impute missing values
+        # Impute missing values only if necessary
         for col in numerical_columns:
-            if col in df_cleaned.columns:
-                impute_value = self.numerical_imputation_values.get(col, df_cleaned[col].median())
+            if col in df_cleaned.columns and df_cleaned[col].isna().any():
+                impute_value = self.numerical_imputation_values.get(col)
                 logger.info(f"Imputing missing values in {col} with {impute_value}")
-                df_cleaned[col]=df_cleaned[col].fillna(impute_value)
+                df_cleaned[col] = df_cleaned[col].fillna(impute_value)
+            else:
+                logger.debug(f"No missing values in {col}, skipping imputation")
                 
         for col in categorical_columns:
-            if col in df_cleaned.columns:
-                impute_value = self.categorical_imputation_values.get(col, df_cleaned[col].mode()[0])
+            if col in df_cleaned.columns and df_cleaned[col].isna().any():
+                impute_value = self.categorical_imputation_values.get(col)
                 logger.info(f"Imputing missing values in {col} with {impute_value}")
-                df_cleaned[col]=df_cleaned[col].fillna(impute_value)
+                df_cleaned[col] = df_cleaned[col].fillna(impute_value)
+            else:
+                logger.debug(f"No missing values in {col}, skipping imputation")
                 
         logger.info("Data cleaning completed")
         return df_cleaned
@@ -329,36 +332,22 @@ class ChurnPredictor:
             # Ensure all required columns exist
             for col in self.feature_columns:
                 if col not in df_processed.columns:
-                    df_processed[col] = 0
+                    df_processed[col] = self.numerical_imputation_values.get(col, 0)
 
             X = df_processed[self.feature_columns]
 
             churn_preds = self.model.predict(X)
             churn_proba = self.model.predict_proba(X)[:, 1]
 
-            # --- SHAP explainer ---
-            explainer = shap.TreeExplainer(self.model)
-            shap_values = explainer.shap_values(X)[1]  # class=1 (churn)
-
+       
             results = []
             for i in range(len(X)):
                 churn_label = "Yes" if churn_preds[i] == 1 else "No"
                 prob = float(churn_proba[i])
 
-                # Local SHAP values for this customer
-                customer_shap = shap_values[i]
-                feature_contribs = list(zip(self.feature_columns, customer_shap))
-
-                # Sort by absolute impact
-                sorted_contribs = sorted(feature_contribs, key=lambda x: abs(x[1]), reverse=True)
-
-                # Select top N
-                top_factors = [(f, float(val)) for f, val in sorted_contribs[:top_n]]
-
                 results.append({
                     "churn": churn_label,
-                    "probability": prob,
-                    "key_factors": top_factors
+                    "probability": prob
                 })
 
             logger.info(f"Prediction results: {results}")
