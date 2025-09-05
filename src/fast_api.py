@@ -5,6 +5,11 @@ from typing import Dict, Any, Optional
 from src.chatbot.chatbot import ChurnChatbot
 from src.chatbot.chatbot_utils import get_latest_model_path
 from src.logger_config import load_logger 
+import yaml
+
+# Load configuration
+with open("config.yaml", "r") as config_file:
+    config = yaml.safe_load(config_file)
 
 logger = load_logger("FastAPI")
 
@@ -16,7 +21,7 @@ app = FastAPI(
 
 # Initialize chatbot
 try:
-    model_path = get_latest_model_path("models")
+    model_path = get_latest_model_path(config["paths"]["models_dir"])
     chatbot = ChurnChatbot(model_path)
     logger.info("FastAPI application initialized with ChurnChatbot")
 except Exception as e:
@@ -117,4 +122,9 @@ async def root():
 
 if __name__ == "__main__":
     logger.info("Starting FastAPI server")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(
+        app,
+        host=config["fastapi"]["host"],
+        port=config["fastapi"]["port"],
+        log_level=config["fastapi"]["log_level"]
+    )

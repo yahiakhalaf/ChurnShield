@@ -1,0 +1,46 @@
+# Configuration for Churn Prediction Chatbot Application
+
+# FastAPI settings
+fastapi:
+  host: "0.0.0.0"
+  port: 8000
+  log_level: "info"
+  api_base_url: "http://localhost:8000"
+
+# Gradio settings
+gradio:
+  server_name: "127.0.0.1"
+  server_port: 7860
+  share: false
+  debug: false
+  show_error: true
+
+# Directory paths
+paths:
+  models_dir: "models"
+  log_dir: "logs"
+  dataset_dir: "datasets"
+  report_dir: "reports"
+
+# Chatbot settings
+chatbot:
+  memory_threshold: 10
+  model_name: "llama3.1:8b"
+
+# Model training settings
+training:
+  input_file: "datasets/Customer-Churn.csv"
+  model_dir: "models"
+  report_dir: "reports"
+
+churn_predictor:
+  model_name: "RandomForest"
+  random_state: 42
+  cv_folds: 3
+  scoring_metric: "recall"
+  hyperparameter_grid:
+    n_estimators: [ 30,50,70,100]
+    max_depth: [ 5,10,15,20,50]
+    min_samples_split: [ 20,30,50,70]
+    min_samples_leaf: [5,10,15,20,25]
+    class_weight: ['balanced']

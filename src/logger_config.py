@@ -1,7 +1,11 @@
 import logging
 import os
 import glob
+import yaml
 from datetime import datetime
+
+with open("config.yaml", "r") as config_file:
+    config = yaml.safe_load(config_file)
 
 def setup_logger(module_name):
     """Set up a new global logger with a timestamped log file named ChurnShield_<timestamp>.log.
@@ -13,7 +17,7 @@ def setup_logger(module_name):
         logging.Logger: The configured logger instance.
     """
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    log_dir = 'logs'
+    log_dir = config["paths"]["log_dir"]
     os.makedirs(log_dir, exist_ok=True)
     log_file = os.path.join(log_dir, f'ChurnShield_{timestamp}.log')
     
@@ -40,7 +44,7 @@ def load_logger(module_name):
     Returns:
         logging.Logger: The configured logger instance for the most recent log file.
     """
-    log_dir = 'logs'
+    log_dir = config["paths"]["log_dir"]
     os.makedirs(log_dir, exist_ok=True)
     
     # Find the most recent log file
@@ -66,3 +70,4 @@ def load_logger(module_name):
     logger.timestamp = timestamp
     
     return logger
+

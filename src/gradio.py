@@ -1,11 +1,17 @@
 import gradio as gr
 import requests
 from typing import List, Dict
-from src.logger_config import load_logger  
+from src.logger_config import load_logger 
+import yaml
+
+# Load configuration
+with open("config.yaml", "r") as config_file:
+    config = yaml.safe_load(config_file)
+
 logger = load_logger("gradio UI")
 
 # Configuration
-API_BASE_URL = "http://localhost:8000"
+API_BASE_URL = config["fastapi"]["api_base_url"]
 
 
 def test_connection() -> bool:
@@ -203,9 +209,9 @@ if __name__ == "__main__":
     logger.info("Starting Gradio interface...")
     demo = create_interface()
     demo.launch(
-        server_name="127.0.0.1", 
-        server_port=7860,          
-        share=False,              
-        debug=True,             
-        show_error=True         
+        server_name=config["gradio"]["server_name"],
+        server_port=config["gradio"]["server_port"],
+        share=config["gradio"]["share"],
+        debug=config["gradio"]["debug"],
+        show_error=config["gradio"]["show_error"]
     )

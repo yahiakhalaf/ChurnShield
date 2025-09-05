@@ -7,6 +7,11 @@ from sklearn.metrics import accuracy_score, classification_report, roc_auc_score
 import pickle
 from datetime import datetime
 from src.logger_config import load_logger
+import yaml
+
+# Load configuration
+with open("config.yaml", "r") as config_file:
+    config = yaml.safe_load(config_file)
 
 
 # Initialize logger at module level
@@ -14,8 +19,8 @@ logger = load_logger('ChurnPredictor')
 
 class ChurnPredictor:
     def __init__(self):
-        self.model = RandomForestClassifier(random_state=42)
-        self.model_name = "RandomForest"
+        self.model = RandomForestClassifier(random_state=config["churn_predictor"]["random_state"])
+        self.model_name = config["churn_predictor"]["model_name"]
         self.onehot_encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
         self.feature_columns = []
         self.categorical_columns = []
@@ -197,19 +202,13 @@ class ChurnPredictor:
     def hyperparameter_tuning(self, X, y):
         """Perform hyperparameter tuning using GridSearchCV with recall scoring"""
         logger.info("Starting hyperparameter tuning")
-        param_grid = {
-            'n_estimators': [ 30,50,70,100],
-            'max_depth': [ 5,10,15,20,50],
-            'min_samples_split': [ 20,30,50,70],
-            'min_samples_leaf': [5,10,15,20,25],
-            'class_weight': ['balanced']
-        }
+        param_grid = config["churn_predictor"]["hyperparameter_grid"]
 
         grid_search = GridSearchCV(
             estimator=RandomForestClassifier(random_state=42),
             param_grid=param_grid,
-            cv=3,
-            scoring='accuracy',
+            cv=config["churn_predictor"]["cv_folds"],
+            scoring=config["churn_predictor"]["scoring_metric"],
             n_jobs=-1
         )
         
@@ -263,7 +262,8 @@ class ChurnPredictor:
             logger.info("Performing cross-validation")
             cv_scores = cross_val_score(
                 self.model, X_train, y_train, 
-                cv=3, scoring='recall'
+                cv=config["churn_predictor"]["cv_folds"],
+                  scoring=config["churn_predictor"]["scoring_metric"]
             )
             
             # Train final model

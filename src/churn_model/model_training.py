@@ -6,6 +6,10 @@ import sys
 import os
 import json
 from datetime import datetime
+import yaml
+
+with open("config.yaml", "r") as config_file:
+    config = yaml.safe_load(config_file)
 
 logger = load_logger('ModelTraining')
 
@@ -58,9 +62,9 @@ def train_and_save_model(input_file, output_model_dir, output_report_dir):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train and save a churn prediction model.")
-    parser.add_argument('--input', type=str, default='datasets/Customer-Churn.csv', help='Path to the input training CSV file')
-    parser.add_argument('--model-dir', type=str, default='models/', help='Directory to save the trained model')
-    parser.add_argument('--report-dir', type=str, default='reports/', help='Directory to save the training report')
+    parser.add_argument('--input', type=str, default=config["training"]["input_file"], help='Path to the input training CSV file')
+    parser.add_argument('--model-dir', type=str, default=config["training"]["model_dir"], help='Directory to save the trained model')
+    parser.add_argument('--report-dir', type=str, default=config["training"]["report_dir"], help='Directory to save the training report')
     args = parser.parse_args()
     
     train_and_save_model(args.input, args.model_dir, args.report_dir)

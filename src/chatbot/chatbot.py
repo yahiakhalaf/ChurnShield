@@ -6,6 +6,12 @@ from langchain_ollama import ChatOllama
 from src.churn_model.churn_predictor import ChurnPredictor
 from src.logger_config import load_logger
 from src.chatbot.chatbot_utils import CustomerData,PredictionResult,get_latest_model_path
+from src.churn_model.model_training import train_and_save_model
+import yaml
+
+# Load configuration
+with open("config.yaml", "r") as config_file:
+    config = yaml.safe_load(config_file)
 
 logger = load_logger("ChurnChatbot")
 
@@ -19,9 +25,9 @@ class ChurnChatbot:
             # Initialize churn predictor
             logger.info("Loading churn predictor model...")
             self.predictor = ChurnPredictor()
-            self.predictor.load_model(model_path)
+            self.predictor.load_model(model_path)            
             logger.info("Churn predictor model loaded successfully")
-            self.llm = ChatOllama(model="llama3.1:8b")
+            self.llm = ChatOllama(model=config["chatbot"]["model_name"])
 
             # Initialize LLM for general text responses (no JSON format)
             logger.info("Initializing Ollama LLM for general responses...")
@@ -36,7 +42,7 @@ class ChurnChatbot:
             # Initialize memory and parser
             self.memory = {"last_customer": None, "last_prediction": None}
             self.interaction_count = 0  
-            self.memory_threshold = 10
+            self.memory_threshold =config["chatbot"]["memory_threshold"]
             init_time = time.time() - start_time
             logger.info(f"ChurnChatbot initialization completed in {init_time:.2f} seconds")
             
