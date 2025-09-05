@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from src.logger_config import load_logger
 logger=load_logger('chatbot_utils')
 
-def get_latest_model_path(models_dir="models") -> str:
+def get_latest_model_path(models_dir=None) -> str:
     """Find the most recent churn model file in the models directory."""
     logger.info(f"Searching for models in directory: {models_dir}")
     pattern = os.path.join(models_dir, "churn_model_*.pkl")
